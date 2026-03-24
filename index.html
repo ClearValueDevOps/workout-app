@@ -933,7 +933,7 @@
             <div id="timer-section" style="display: none;">
                 <div class="timer" id="timer">00:30</div>
                 <div class="timer-controls">
-                    <button style="background: #4caf50; color: white;" onclick="pauseTimer()">Pause</button>
+                    <button id="pause-resume-btn" style="background: #ff9800; color: white;" onclick="togglePauseResume()">Pause</button>
                     <button style="background: #ff5252; color: white;" onclick="resetTimer()">Reset</button>
                 </div>
             </div>
@@ -1345,6 +1345,7 @@
 
         let timerInterval;
         let timeLeft = 30;
+        let initialTime = 30;
         let isTimerRunning = false;
 
         function switchTab(tabName) {
@@ -1434,10 +1435,31 @@
             clearInterval(timerInterval);
         }
 
+        function togglePauseResume() {
+            const btn = document.getElementById('pause-resume-btn');
+            if (isTimerRunning) {
+                pauseTimer();
+                btn.textContent = 'Resume';
+                btn.style.background = '#4caf50';
+            } else {
+                startTimer();
+                btn.textContent = 'Pause';
+                btn.style.background = '#ff9800';
+            }
+        }
+
         function resetTimer(duration) {
             pauseTimer();
-            timeLeft = duration || 30;
+            if (duration !== undefined) {
+                initialTime = duration;
+            }
+            timeLeft = initialTime;
             updateTimerDisplay();
+            const btn = document.getElementById('pause-resume-btn');
+            if (btn) {
+                btn.textContent = 'Pause';
+                btn.style.background = '#ff9800';
+            }
         }
 
         function updateTimerDisplay() {
